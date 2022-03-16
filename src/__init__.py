@@ -9,11 +9,17 @@ __version__ = '1.0.0'
 
 
 class Client(object):
-    def __init__(self, url, api_key=None):
+    def __init__(self, url, api_key=None, sync=True):
+        """
+        :param url: wa-automate URL
+        :param api_key: Authentication key (required if provided on wa-automate cli initialization)
+        :param sync: Default sync/async behavior
+        """
         self.handlers = {}
         self.url = re.sub('\/$', '', url)
         self.methods = json.loads(requests.get(self.url + '/meta/basic/commands').content.decode())
         self.on_events = json.loads(requests.get(self.url + '/meta/basic/listeners').content.decode())
+        self.sync = sync
 
         self.io = socketio.Client()
 
@@ -43,7 +49,15 @@ class Client(object):
                 if item.startswith('on'):
                     client.listen(item, args[0])
                 else:
-                    return client.io.call(item, {'args': args})
+                    sync = client.sync
+                    if 'sync' in kwargs:
+                        sync = kwargs['sync']
+
+                    if sync:
+                        return client.io.call(item, {'args': args})
+                    else:
+                        cb = kwargs['callback'] if 'callback' in kwargs else lambda _: None
+                        client.io.emit(item, {'args': args}, callback=cb)
 
         return Func()
 

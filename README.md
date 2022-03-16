@@ -5,7 +5,7 @@
 1. Run the EASY API
 
 ```bash
-> npx @open-wa/wa-automate --socket -p 8085 -k api_key
+> npx @open-wa/wa-automate --socket -p 8085
 ```
 
 Note: `--socket` flag is required!!
@@ -20,13 +20,20 @@ NUMBER = 'TEST_PHONE_NUMBER@c.us'
 client = Client('http://localhost:8085/')
 
 
-def newMessageHandler(message):
+def printResponse(message):
     print(message)
 
 
-client.onMessage(newMessageHandler)
+# Listening for events
+client.onMessage(printResponse)
+
+# Executing commands
 client.sendText(NUMBER, "this is a text")
-message_id = client.sendAudio(NUMBER, "https://download.samplelib.com/mp3/sample-3s.mp3")
-print(message_id)
-print(client.getHostNumber())
+
+# Sync/Async support
+print(client.getHostNumber())  # Sync request
+client.sendAudio(NUMBER,
+                 "https://download.samplelib.com/mp3/sample-3s.mp3",
+                 sync=False,
+                 callback=printResponse)  # Async request. Callback is optional
 ```
