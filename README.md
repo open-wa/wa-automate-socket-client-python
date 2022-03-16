@@ -2,15 +2,18 @@
 
 ## How to:
 
-1. Run the EASY API
+1. Run the EASY API. Note: `--socket` flag is required!!
 
-```bash
-> npx @open-wa/wa-automate --socket -p 8085
+```
+npx @open-wa/wa-automate --socket -p 8085
 ```
 
-Note: `--socket` flag is required!!
+2. Install 
+```
+pip install wa-automate-socket-client
+```
 
-2. Sample code:
+3. Sample code:
 
 ```python
 from wa_automate_socket_client import Client
