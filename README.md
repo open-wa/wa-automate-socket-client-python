@@ -4,8 +4,12 @@
 
 1. Run the EASY API. Note: `--socket` flag is required!!
 
-```
-npx @open-wa/wa-automate --socket -p 8085
+```bash
+> npx @open-wa/wa-automate --socket -p 8085
+
+# OR use docker
+
+> docker run openwa/wa-automate --socket -p 8085
 ```
 
 2. Install 
