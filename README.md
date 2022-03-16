@@ -13,8 +13,9 @@
 ```
 
 2. Install 
-```
-pip install wa-automate-socket-client
+
+```bash
+> pip install wa-automate-socket-client
 ```
 
 3. Sample code:
