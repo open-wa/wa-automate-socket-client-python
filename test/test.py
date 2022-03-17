@@ -1,9 +1,9 @@
-from src import Client
+from src import SocketClient
 
 if __name__ == '__main__':
     NUMBER = 'TEST_PHONE_NUMBER@c.us'
 
-    client = Client('http://localhost:8085/')
+    client = SocketClient('http://localhost:8085/')
 
 
     def printResponse(message):
@@ -19,3 +19,6 @@ if __name__ == '__main__':
     # Sync/Async support
     print(client.getHostNumber())  # Sync request
     client.sendAudio(NUMBER, "https://download.samplelib.com/mp3/sample-3s.mp3", sync=False, callback=printResponse)  # Async request. Callback is optional
+
+    # Finally disconnect
+    client.disconnect()

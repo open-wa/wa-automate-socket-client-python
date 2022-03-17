@@ -21,11 +21,11 @@
 3. Sample code:
 
 ```python
-from wa_automate_socket_client import Client
+from wa_automate_socket_client import SocketClient
 
 NUMBER = 'TEST_PHONE_NUMBER@c.us'
 
-client = Client('http://localhost:8085/', 'secure_api_key')
+client = SocketClient('http://localhost:8085/', 'secure_api_key')
 
 
 def printResponse(message):
@@ -44,4 +44,7 @@ client.sendAudio(NUMBER,
                  "https://download.samplelib.com/mp3/sample-3s.mp3",
                  sync=False,
                  callback=printResponse)  # Async request. Callback is optional
+
+# Finally disconnect
+client.disconnect()
 ```

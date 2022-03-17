@@ -8,7 +8,7 @@ import socketio
 __version__ = '1.0.0'
 
 
-class Client(object):
+class SocketClient(object):
     def __init__(self, url, api_key=None, sync=True):
         """
         :param url: wa-automate URL
@@ -17,8 +17,6 @@ class Client(object):
         """
         self.handlers = {}
         self.url = re.sub('\/$', '', url)
-        self.methods = json.loads(requests.get(self.url + '/meta/basic/commands').content.decode())
-        self.on_events = json.loads(requests.get(self.url + '/meta/basic/listeners').content.decode())
         self.sync = sync
 
         self.io = socketio.Client()
@@ -34,9 +32,15 @@ class Client(object):
                 for handler in self.handlers[event].values():
                     handler(data)
 
+        @self.io.event
+        def connect_error(data):
+            print(data)
+
         self.io.connect(self.url, auth={'apiKey': api_key})
 
     def __dir__(self):
+        self.methods = json.loads(requests.get(self.url + '/meta/basic/commands').content.decode())
+        self.on_events = json.loads(requests.get(self.url + '/meta/basic/listeners').content.decode())
         methods = list(self.methods.keys()) + self.on_events + super().__dir__()
         methods.sort()
         return methods
@@ -73,3 +77,6 @@ class Client(object):
             self.handlers[event] = {}
         self.handlers[event][id] = handler
         return id
+
+    def disconnect(self):
+        self.io.disconnect()
