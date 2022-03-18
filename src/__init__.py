@@ -1,9 +1,11 @@
 import json
 import re
+import time
 import uuid
 
 import requests
 import socketio
+from socketio.exceptions import ConnectionError
 
 __version__ = '1.0.0'
 
@@ -36,7 +38,12 @@ class SocketClient(object):
         def connect_error(data):
             print(data)
 
-        self.io.connect(self.url, auth={'apiKey': api_key})
+        while True:
+            try:
+                self.io.connect(self.url, auth={'apiKey': api_key})
+                break
+            except ConnectionError:
+                time.sleep(5)
 
     def __dir__(self):
         self.methods = json.loads(requests.get(self.url + '/meta/basic/commands').content.decode())
