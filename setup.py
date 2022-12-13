@@ -88,7 +88,7 @@ setup(
 
     install_requires=[
         'requests',
-        'python-socketio',
+        'python-socketio>=5.6.0',
         'websocket-client',
     ]
 )
